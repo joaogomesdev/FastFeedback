@@ -31,6 +31,7 @@ const DashboardShell = ({ children }: Props) => {
           margin="0 auto"
           w="full"
           px={8}
+          h="70px"
         >
           <Flex>
             <Logo name="logo" fontSize="24px" mr={8} />
@@ -53,6 +54,18 @@ const DashboardShell = ({ children }: Props) => {
         </Breadcrumb>
         <Flex justifyContent="space-between">
           <Heading mb={8}>My Sites</Heading>
+          <Button
+            backgroundColor="gray.900"
+            color="white"
+            fontWeight="medium"
+            _hover={{ bg: "gray.700" }}
+            _active={{
+              bg: "gray.800",
+              transform: "scale(0.95)",
+            }}
+          >
+            + Add Site
+          </Button>
         </Flex>
         {children}
       </Flex>
