@@ -63,6 +63,7 @@ const DashboardShell = ({ children }: Props) => {
               bg: "gray.800",
               transform: "scale(0.95)",
             }}
+            onClick={() => {}}
           >
             + Add Site
           </Button>
