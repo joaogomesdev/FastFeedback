@@ -15,7 +15,7 @@ export default function Home() {
       h="100vh"
     >
       <Head>
-        <title>FastFeedback</title>
+        <title>Fast Feedback</title>
       </Head>
 
       <Logo color="back" fontSize="64px" />
