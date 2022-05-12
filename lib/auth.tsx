@@ -1,14 +1,11 @@
 import React, { useState, useEffect, useContext, createContext } from "react";
-
 import { getAuth, GithubAuthProvider, signInWithPopup } from "firebase/auth";
-import firebase from "./firebase";
+
+import firebase, { firebaseConfig } from "./firebase";
+import { createUser } from "./firestore";
 
 if (!firebase.getApps.length) {
-  firebase.initializeApp({
-    apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-    authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  });
+  firebase.initializeApp(firebaseConfig);
 }
 
 type AuthContextData = {
@@ -38,10 +35,11 @@ function useAuthProvider() {
   const [user, setUser] = useState(null);
   const auth = getAuth();
 
-  const handleUser = (rawUser: any) => {
+  const handleUser = async (rawUser: any) => {
     if (rawUser) {
       const user = formatUser(rawUser);
 
+      await createUser(user.uid, user);
       setUser(user);
       return user;
     } else {
@@ -91,5 +89,6 @@ const formatUser = (user: any) => {
     email: user.email,
     name: user.displayName,
     provider: user.providerData[0].providerId,
+    photoUrl: user.photoURL,
   };
 };
