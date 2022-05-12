@@ -23,6 +23,7 @@ export async function createUser(uid: string, data: any) {
 
 export async function createSite(data: any) {
   const uuid = v4();
+
   await setDoc(
     doc(db, "sites", uuid),
     {

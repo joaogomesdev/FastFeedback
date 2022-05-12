@@ -5,12 +5,22 @@ import { useAuth } from "@lib/auth";
 import { Logo } from "@styles/theme";
 import EmptyState from "@components/EmptyState";
 import { userInfo } from "os";
+import SiteTableSkeleton from "@components/SiteTableSkeleton";
+import DashboardShell from "@components/DashboardShell";
 
 export default function Dashboard() {
   const auth = useAuth();
 
   if (!auth.user) {
-    return "Loading...";
+    return (
+      <DashboardShell>
+        <SiteTableSkeleton />
+      </DashboardShell>
+    );
   }
-  return <EmptyState />;
+  return (
+    <DashboardShell>
+      <EmptyState />
+    </DashboardShell>
+  );
 }
