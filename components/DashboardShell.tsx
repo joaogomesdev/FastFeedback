@@ -1,17 +1,13 @@
 import React from "react";
 import {
-  ChakraProvider,
   Flex,
   Link,
-  Stack,
-  Icon,
   Avatar,
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
   Heading,
   Box,
-  Text,
   Button,
 } from "@chakra-ui/react";
 import { Logo } from "@styles/theme";
@@ -22,7 +18,7 @@ interface Props {
 }
 
 const DashboardShell = ({ children }: Props) => {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   return (
     <Box backgroundColor="gray.100" h="100vh">
       <Flex backgroundColor="white" mb={16} w="full">
@@ -42,7 +38,7 @@ const DashboardShell = ({ children }: Props) => {
             <Link>Feedback</Link>
           </Flex>
           <Flex justifyContent="center" alignItems="center">
-            <Button variant="ghost" mr={2}>
+            <Button variant="ghost" mr={2} onClick={signOut}>
               Log Out
             </Button>
             <Avatar size="sm" src={user.photoUrl} />
