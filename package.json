@@ -12,7 +12,6 @@
     "@chakra-ui/react": "^1.8.8",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
-    "@types/firebase": "^3.2.1",
     "firebase": "^9.8.1",
     "framer-motion": "^6",
     "next": "12.1.6",
@@ -24,6 +23,7 @@
     "@types/react": "^18.0.9",
     "eslint": "8.15.0",
     "eslint-config-next": "12.1.6",
-    "typescript": "^4.6.4"
+    "typescript": "^4.6.4",
+    "@types/firebase": "^3.2.1",
   }
 }
