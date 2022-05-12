@@ -39,10 +39,12 @@ const DashboardShell = ({ children }: Props) => {
             <Link>Feedback</Link>
           </Flex>
           <Flex justifyContent="center" alignItems="center">
-            <Button variant="ghost" mr={2} onClick={signOut}>
-              Log Out
-            </Button>
-            <Avatar size="sm" src={user.photoUrl} />
+            {user && (
+              <Button variant="ghost" mr={2} onClick={signOut}>
+                Log Out
+              </Button>
+            )}
+            <Avatar size="sm" src={user?.photoUrl} />
           </Flex>
         </Flex>
       </Flex>

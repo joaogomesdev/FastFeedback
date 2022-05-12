@@ -13,6 +13,7 @@ import {
   Input,
   useToast,
 } from "@chakra-ui/react";
+import { useAuth } from "@lib/auth";
 import { createSite } from "@lib/firestore";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -26,13 +27,20 @@ const AddSiteModal = () => {
   } = useForm();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { user } = useAuth();
   const toast = useToast();
+
   const initialRef = React.useRef();
   const finalRef = React.useRef();
 
-  const onSubmit = async (data) => {
+  const onSubmit = async ({ name, link }) => {
     try {
-      await createSite(data);
+      await createSite({
+        author: user.uid,
+        createdAt: new Date().toISOString(),
+        name,
+        link,
+      });
       toast({
         title: "Success!",
         description: "We've added your site.",
@@ -41,7 +49,9 @@ const AddSiteModal = () => {
         isClosable: true,
       });
       onClose();
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

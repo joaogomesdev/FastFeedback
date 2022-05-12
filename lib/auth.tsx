@@ -5,7 +5,7 @@ import firebase, { firebaseConfig } from "./firebase";
 import { createUser } from "./firestore";
 
 if (!firebase.getApps.length) {
-  firebase.initializeApp(firebaseConfig);
+  firebase.initializeApp(firebaseConfig, "client-side");
 }
 
 type AuthContextData = {
