@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { Logo } from "@styles/theme";
 import { useAuth } from "@lib/auth";
+import { AddSiteModal } from "./AddSiteModal";
 
 interface Props {
   children: React.ReactNode;
@@ -56,19 +57,7 @@ const DashboardShell = ({ children }: Props) => {
         </Breadcrumb>
         <Flex justifyContent="space-between">
           <Heading mb={8}>My Sites</Heading>
-          <Button
-            backgroundColor="gray.900"
-            color="white"
-            fontWeight="medium"
-            _hover={{ bg: "gray.700" }}
-            _active={{
-              bg: "gray.800",
-              transform: "scale(0.95)",
-            }}
-            onClick={() => {}}
-          >
-            + Add Site
-          </Button>
+          <AddSiteModal>+ Add Site</AddSiteModal>
         </Flex>
         {children}
       </Flex>
