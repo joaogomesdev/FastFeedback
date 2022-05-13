@@ -21,7 +21,7 @@ const SiteTable = ({ sites }) => {
             <Td fontWeight="medium">{site.name}</Td>
             <Td>{site.link}</Td>
             <Td>
-              <Link>View feedback</Link>
+              <Link>View Feedback</Link>
             </Td>
             <Td>{format(parseISO(site.createdAt), "PPpp")}</Td>
           </Box>
