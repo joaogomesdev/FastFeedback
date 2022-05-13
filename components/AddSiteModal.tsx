@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Modal,
   ModalOverlay,
@@ -13,34 +14,45 @@ import {
   Input,
   useToast,
 } from "@chakra-ui/react";
-import { useAuth } from "@lib/auth";
-import { createSite } from "@lib/firestore";
-import React from "react";
 import { useForm } from "react-hook-form";
+import useSWR, { useSWRConfig } from "swr";
 
-const AddSiteModal = () => {
+import { createSite } from "@lib/firestore";
+import { useAuth } from "@lib/auth";
+import { database } from "firebase-admin";
+import { fetcher } from "@utils/fetcher";
+
+const AddSiteModal = ({ children }) => {
+  const { user } = useAuth();
+  const { mutate } = useSWRConfig();
+
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm();
-
+  const { data } = useSWR("/api/sites", fetcher);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { user } = useAuth();
   const toast = useToast();
+
+  const [isCreatingSite, setIsCreatingSite] = React.useState(false);
 
   const initialRef = React.useRef();
   const finalRef = React.useRef();
 
   const onSubmit = async ({ name, link }) => {
     try {
-      await createSite({
+      setIsCreatingSite(true);
+      const newSite = {
         author: user.uid,
         createdAt: new Date().toISOString(),
         name,
         link,
-      });
+      };
+
+      await createSite(newSite);
+      setIsCreatingSite(false);
       toast({
         title: "Success!",
         description: "We've added your site.",
@@ -48,6 +60,7 @@ const AddSiteModal = () => {
         duration: 5000,
         isClosable: true,
       });
+      mutate("/api/sites");
       onClose();
     } catch (error) {
       console.log(error);
@@ -56,8 +69,18 @@ const AddSiteModal = () => {
 
   return (
     <>
-      <Button onClick={onOpen} fontWeight="medium" variant="solid" size="md">
-        Add your fist site
+      <Button
+        onClick={onOpen}
+        backgroundColor="gray.900"
+        color="white"
+        fontWeight="medium"
+        _hover={{ bg: "gray.700" }}
+        _active={{
+          bg: "gray.800",
+          transform: "scale(0.95)",
+        }}
+      >
+        {children}
       </Button>
 
       <Modal
@@ -74,7 +97,6 @@ const AddSiteModal = () => {
             <FormControl>
               <FormLabel>Name</FormLabel>
               <Input
-                ref={initialRef}
                 {...register("name", { required: true })}
                 placeholder="My site"
               />
@@ -99,6 +121,7 @@ const AddSiteModal = () => {
               color="#194D4C"
               fontWeight="medium"
               type="submit"
+              isLoading={isCreatingSite}
             >
               Create
             </Button>

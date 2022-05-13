@@ -1,26 +1,31 @@
 import Head from "next/head";
-import { Button, Code, Flex, Heading, Icon, Text } from "@chakra-ui/react";
-
+import useSWR from "swr";
 import { useAuth } from "@lib/auth";
-import { Logo } from "@styles/theme";
 import EmptyState from "@components/EmptyState";
-import { userInfo } from "os";
 import SiteTableSkeleton from "@components/SiteTableSkeleton";
 import DashboardShell from "@components/DashboardShell";
+import { isGeneratorObject } from "util/types";
+import SiteTable from "@components/SiteTable";
+const fetcher = (apiURL: string) => fetch(apiURL).then((res) => res.json());
 
 export default function Dashboard() {
-  const auth = useAuth();
+  const { data } = useSWR("/api/sites", fetcher);
 
-  if (!auth.user) {
+  if (!data) {
     return (
       <DashboardShell>
         <SiteTableSkeleton />
       </DashboardShell>
     );
   }
+
   return (
     <DashboardShell>
-      <EmptyState />
+      {data.sites?.length > 0 ? (
+        <SiteTable sites={data.sites} />
+      ) : (
+        <EmptyState />
+      )}
     </DashboardShell>
   );
 }
