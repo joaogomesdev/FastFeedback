@@ -1,5 +1,7 @@
 import React from "react";
-import { Box, Link, Skeleton } from "@chakra-ui/react";
+import NextLink from "next/link";
+import { Box, Link } from "@chakra-ui/react";
+
 import { Table, Tr, Th, Td } from "./Table";
 import { format, parseISO } from "date-fns";
 
@@ -21,7 +23,9 @@ const SiteTable = ({ sites }) => {
             <Td fontWeight="medium">{site.name}</Td>
             <Td>{site.link}</Td>
             <Td>
-              <Link>View Feedback</Link>
+              <NextLink href={`/p/[siteId]`} as={`/p/${site.id}`} passHref>
+                <Link>View Feedback</Link>
+              </NextLink>
             </Td>
             <Td>{format(parseISO(site.createdAt), "PPpp")}</Td>
           </Box>

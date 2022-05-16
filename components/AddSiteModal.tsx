@@ -17,10 +17,9 @@ import {
 import { useForm } from "react-hook-form";
 import useSWR, { useSWRConfig } from "swr";
 
-import { createSite } from "@lib/firestore";
 import { useAuth } from "@lib/auth";
-import { database } from "firebase-admin";
 import { fetcher } from "@utils/fetcher";
+import { createSite } from "@lib/firestore";
 
 const AddSiteModal = ({ children }) => {
   const { user } = useAuth();

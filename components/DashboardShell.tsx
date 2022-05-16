@@ -10,8 +10,9 @@ import {
   Box,
   Button,
 } from "@chakra-ui/react";
-import { Logo } from "@styles/theme";
+
 import { useAuth } from "@lib/auth";
+import { Logo } from "@styles/theme";
 import { AddSiteModal } from "./AddSiteModal";
 
 interface Props {
