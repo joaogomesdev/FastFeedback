@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useContext, createContext } from "react";
 import { getAuth, GithubAuthProvider, signInWithPopup } from "firebase/auth";
+import React from "react";
 
-import firebase, { firebaseConfig } from "./firebase";
 import { createUser } from "./firestore";
+import firebase, { firebaseConfig } from "./firebase";
 
 if (!firebase.getApps.length) {
   firebase.initializeApp(firebaseConfig, "client-side");
@@ -20,7 +20,7 @@ export interface IAuthContext {
   signOut: () => Promise<void>;
 }
 
-const authContext = createContext<AuthContextData>({} as IAuthContext);
+const authContext = React.createContext<AuthContextData>({} as IAuthContext);
 
 export function AuthProvider({ children }) {
   const auth = useAuthProvider();
@@ -28,11 +28,11 @@ export function AuthProvider({ children }) {
 }
 
 export const useAuth = () => {
-  return useContext(authContext);
+  return React.useContext(authContext);
 };
 
 function useAuthProvider() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = React.useState(null);
   const auth = getAuth();
 
   const handleUser = async (rawUser: any) => {
@@ -71,7 +71,7 @@ function useAuthProvider() {
     handleUser(false);
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(handleUser);
     return () => unsubscribe();
   }, []);

@@ -1,9 +1,8 @@
-import { initializeApp } from "firebase/app";
 import { v4 } from "uuid";
+import { initializeApp } from "firebase/app";
 
-import { getFirestore, setDoc, doc } from "firebase/firestore/lite";
-import slugify from "slugify";
 import { firebaseConfig } from "./firebase";
+import { getFirestore, setDoc, doc } from "firebase/firestore/lite";
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
@@ -26,6 +25,20 @@ export async function createSite(data: any) {
 
   await setDoc(
     doc(db, "sites", uuid),
+    {
+      uuid,
+      ...data,
+    },
+    {
+      merge: true,
+    }
+  );
+}
+export async function createFeedback(data: any) {
+  const uuid = v4();
+
+  await setDoc(
+    doc(db, "feedback", uuid),
     {
       uuid,
       ...data,

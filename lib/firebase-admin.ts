@@ -1,4 +1,5 @@
 import admin from "firebase-admin";
+
 import firebaseAdminConfig from "../firebaseAdmin.json";
 
 try {

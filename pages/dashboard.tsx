@@ -1,11 +1,10 @@
-import Head from "next/head";
 import useSWR from "swr";
-import { useAuth } from "@lib/auth";
-import EmptyState from "@components/EmptyState";
-import SiteTableSkeleton from "@components/SiteTableSkeleton";
-import DashboardShell from "@components/DashboardShell";
-import { isGeneratorObject } from "util/types";
+
 import SiteTable from "@components/SiteTable";
+import EmptyState from "@components/EmptyState";
+import DashboardShell from "@components/DashboardShell";
+import SiteTableSkeleton from "@components/SiteTableSkeleton";
+
 const fetcher = (apiURL: string) => fetch(apiURL).then((res) => res.json());
 
 export default function Dashboard() {
