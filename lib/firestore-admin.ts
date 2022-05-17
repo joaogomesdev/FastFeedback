@@ -1,12 +1,10 @@
 import { compareDesc, parseISO } from "date-fns";
 
-import admin from "./firebase-admin";
-
-const db = admin.firestore();
+import { firestore } from "./firebase-admin";
 
 export async function getAllFeedback(siteId: any) {
   try {
-    const snapshot = await db
+    const snapshot = await firestore
       .collection("feedback")
       .where("siteId", "==", siteId)
       .get();
@@ -28,7 +26,7 @@ export async function getAllFeedback(siteId: any) {
 
 export async function getAllSites() {
   try {
-    const snapshot = await db.collection("sites").get();
+    const snapshot = await firestore.collection("sites").get();
 
     const sites = [];
 
@@ -40,4 +38,19 @@ export async function getAllSites() {
   } catch (error) {
     return { error };
   }
+}
+
+export async function getUserSites(userId) {
+  const snapshot = await firestore
+    .collection("sites")
+    .where("author", "==", userId)
+    .get();
+
+  const sites = [];
+
+  (await snapshot).forEach(async (doc) => {
+    sites.push({ id: doc.id, ...doc.data() });
+  });
+
+  return { sites };
 }

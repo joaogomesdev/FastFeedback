@@ -18,5 +18,7 @@ try {
     console.error("Firebase admin initialization error", error.stack);
   }
 }
+const auth = admin.auth();
+const firestore = admin.firestore();
 
-export default admin;
+export { auth, firestore };

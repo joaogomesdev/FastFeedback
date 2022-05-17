@@ -1,14 +1,21 @@
 import useSWR from "swr";
 
+import { useAuth } from "@lib/auth";
 import SiteTable from "@components/SiteTable";
 import EmptyState from "@components/EmptyState";
 import DashboardShell from "@components/DashboardShell";
 import SiteTableSkeleton from "@components/SiteTableSkeleton";
 
-const fetcher = (apiURL: string) => fetch(apiURL).then((res) => res.json());
+const fetcher = (url: string, token: string) =>
+  fetch(url, {
+    method: "GET",
+    headers: new Headers({ "Content-Type": "application/json", token }),
+    credentials: "same-origin",
+  }).then((res) => res.json());
 
 export default function Dashboard() {
-  const { data } = useSWR("/api/sites", fetcher);
+  const { user } = useAuth();
+  const { data } = useSWR(user ? ["/api/sites", user.token] : null, fetcher);
 
   if (!data) {
     return (

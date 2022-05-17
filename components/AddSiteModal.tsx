@@ -31,7 +31,6 @@ const AddSiteModal = ({ children }) => {
     watch,
     formState: { errors },
   } = useForm();
-  const { data } = useSWR("/api/sites", fetcher);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
 
@@ -59,11 +58,9 @@ const AddSiteModal = ({ children }) => {
         duration: 5000,
         isClosable: true,
       });
-      mutate("/api/sites");
+      mutate(["/api/sites", user.token]);
       onClose();
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   return (
