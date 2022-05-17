@@ -1,12 +1,20 @@
-import admin from "@lib/firebase-admin";
-import { getAllSites } from "@lib/firestore-admin";
+import { NextApiRequest, NextApiResponse } from "next";
 
-export default async function handler(_, res) {
-  const { error, sites } = await getAllSites();
+import { auth } from "@lib/firebase-admin";
+import { getUserSites } from "@lib/firestore-admin";
 
-  if (error) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  try {
+    const { token } = req.headers;
+    const { uid } = await auth.verifyIdToken(String(token));
+
+    const { sites } = await getUserSites(uid);
+
+    res.status(200).json({ sites });
+  } catch (error) {
     res.status(500).send({ error });
   }
-
-  res.status(200).json({ sites });
 }

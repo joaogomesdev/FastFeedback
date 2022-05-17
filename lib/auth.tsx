@@ -3,6 +3,7 @@ import React from "react";
 
 import { createUser } from "./firestore";
 import firebase, { firebaseConfig } from "./firebase";
+import { isError } from "util";
 
 if (!firebase.getApps.length) {
   firebase.initializeApp(firebaseConfig, "client-side");
@@ -38,8 +39,9 @@ function useAuthProvider() {
   const handleUser = async (rawUser: any) => {
     if (rawUser) {
       const user = formatUser(rawUser);
+      const { token, ...userWihoutTheToken } = user;
 
-      await createUser(user.uid, user);
+      await createUser(user.uid, userWihoutTheToken);
       setUser(user);
       return user;
     } else {
@@ -88,6 +90,7 @@ const formatUser = (user: any) => {
     uid: user.uid,
     email: user.email,
     name: user.displayName,
+    token: user.accessToken,
     provider: user.providerData[0].providerId,
     photoUrl: user.photoURL,
   };
