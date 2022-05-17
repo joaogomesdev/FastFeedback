@@ -1,9 +1,9 @@
 import { getAuth, GithubAuthProvider, signInWithPopup } from "firebase/auth";
 import React from "react";
+import Cookies from "js-cookie";
 
 import { createUser } from "./firestore";
 import firebase, { firebaseConfig } from "./firebase";
-import { isError } from "util";
 
 if (!firebase.getApps.length) {
   firebase.initializeApp(firebaseConfig, "client-side");
@@ -43,9 +43,16 @@ function useAuthProvider() {
 
       await createUser(user.uid, userWihoutTheToken);
       setUser(user);
+
+      Cookies.set("fast-feedback-auth", String(true), {
+        expires: 1,
+      });
+      console.log("helkiiisadajsbdjhabj");
+
       return user;
     } else {
       setUser(false);
+      Cookies.remove("fast-feedback-auth");
       return false;
     }
   };

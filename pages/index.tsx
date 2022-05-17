@@ -3,6 +3,7 @@ import { Button, Flex, Link, Text } from "@chakra-ui/react";
 
 import { useAuth } from "@lib/auth";
 import { Logo } from "@styles/theme";
+import Script from "next/script";
 
 export default function Home() {
   const auth = useAuth();
@@ -16,6 +17,17 @@ export default function Home() {
       maxW="400px"
       margin="0 auto"
     >
+      <Script
+        id="redirectScript"
+        dangerouslySetInnerHTML={{
+          __html: `
+          if (document.cookie && document.cookie.includes('fast-feedback-auth')) {
+            window.location.href = "/dashboard"
+          }
+          `,
+        }}
+      />
+
       <Head>
         <title>Fast Feedback</title>
       </Head>
