@@ -30,7 +30,7 @@ const AddSiteModal = ({ children }) => {
     formState: { errors },
   } = useForm();
   const toast = useToast();
-  const { user } = useAuth();
+  const { user, token } = useAuth();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [isCreatingSite, setIsCreatingSite] = React.useState(false);
@@ -57,7 +57,7 @@ const AddSiteModal = ({ children }) => {
         duration: 5000,
         isClosable: true,
       });
-      mutate("/api/sites");
+      mutate(["/api/sites", token]);
       onClose();
     } catch (error) {}
   };
