@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
+import { getUserFeedback } from "@lib/supabase-db";
 import { supabaseClient } from "@lib/supabase-client";
-import { getAllSites, getUserSites } from "@lib/supabase-db";
 
 export default async function handler(
   req: NextApiRequest,
@@ -12,9 +12,9 @@ export default async function handler(
 
     const { data } = await supabaseClient.auth.api.getUser(String(token));
 
-    const response = await getUserSites(data.id);
+    const { feedback } = await getUserFeedback(data.id);
 
-    res.status(200).json({ sites: response.sites });
+    res.status(200).json({ feedback });
   } catch (error) {
     res.status(500).send({ error });
   }

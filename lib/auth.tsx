@@ -1,22 +1,19 @@
-import { getAuth, GithubAuthProvider, signInWithPopup } from "firebase/auth";
 import React from "react";
 import Cookies from "js-cookie";
 
-import { createUser } from "./firestore";
-import firebase, { firebaseConfig } from "./firebase";
-
-if (!firebase.getApps.length) {
-  firebase.initializeApp(firebaseConfig, "client-side");
-}
+import { supabaseClient } from "./supabase-client";
+import { createUser, getUser } from "./supabase-db";
 
 type AuthContextData = {
   user: any;
+  token: string;
   signInWithGithub(): Promise<void>;
   signOut: () => Promise<void>;
 };
 
 export interface IAuthContext {
   user: any;
+  token: string;
   signInWithGithub: () => Promise<void>;
   signOut: () => Promise<void>;
 }
@@ -34,20 +31,18 @@ export const useAuth = () => {
 
 function useAuthProvider() {
   const [user, setUser] = React.useState(null);
-  const auth = getAuth();
+  const [token, setToken] = React.useState("");
+  const [isLoading, setLoading] = React.useState(false);
 
   const handleUser = async (rawUser: any) => {
     if (rawUser) {
       const user = formatUser(rawUser);
-      const { token, ...userWihoutTheToken } = user;
+      const existingUser = await getUser(user.uid);
 
-      await createUser(user.uid, userWihoutTheToken);
+      if (existingUser.user.length == 0) {
+        await createUser(user);
+      }
       setUser(user);
-
-      Cookies.set("fast-feedback-auth", String(true), {
-        expires: 1,
-      });
-      console.log("helkiiisadajsbdjhabj");
 
       return user;
     } else {
@@ -58,47 +53,56 @@ function useAuthProvider() {
   };
 
   const signInWithGithub = async () => {
-    return signInWithPopup(auth, new GithubAuthProvider())
-      .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-        handleUser(user);
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-
-        console.log(
-          "Error code: " + errorCode,
-          "error message: " + errorMessage
-        );
-      });
+    await supabaseClient.auth.signIn({
+      provider: "github",
+    });
   };
 
   const signOut = async () => {
-    await auth.signOut();
+    await supabaseClient.auth.signOut();
     handleUser(false);
   };
 
   React.useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(handleUser);
-    return () => unsubscribe();
+    const supabaseSession = supabaseClient.auth.session();
+
+    if (supabaseSession?.user?.id) {
+      handleUser(supabaseSession?.user);
+      setToken(supabaseSession.access_token);
+      Cookies.set("fast-feedback-auth", String(true), {
+        expires: 1,
+      });
+    }
+    setLoading(false);
+    supabaseClient.auth.onAuthStateChange((_event, session) => {
+      if (session?.user?.id) {
+        handleUser(supabaseSession?.user);
+        setToken(session.access_token);
+        Cookies.set("fast-feedback-auth", String(true), {
+          expires: 1,
+        });
+      }
+      setLoading(false);
+    });
   }, []);
 
   return {
     user,
+    token,
     signInWithGithub,
     signOut,
   };
 }
 
 const formatUser = (user: any) => {
+  const userData = user.user_metadata;
+  const provider = user.identities[0].provider;
+
   return {
-    uid: user.uid,
-    email: user.email,
-    name: user.displayName,
-    token: user.accessToken,
-    provider: user.providerData[0].providerId,
-    photoUrl: user.photoURL,
+    uid: user.id,
+    email: userData.email,
+    name: userData.full_name,
+    provider: provider,
+    avatar_url: userData.avatar_url,
   };
 };

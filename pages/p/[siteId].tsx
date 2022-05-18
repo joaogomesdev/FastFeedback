@@ -1,12 +1,19 @@
+import {
+  Box,
+  Button,
+  FormControl,
+  FormLabel,
+  Heading,
+  Input,
+} from "@chakra-ui/react";
 import React from "react";
+import Head from "next/head";
 import { GetStaticProps } from "next";
 import { useRouter } from "next/router";
-import { Box, Button, FormControl, FormLabel, Input } from "@chakra-ui/react";
 
 import { useAuth } from "@lib/auth";
-import { createFeedback } from "@lib/firestore";
 import { Feedback } from "@components/Feedback";
-import { getAllFeedback, getAllSites } from "@lib/firestore-admin";
+import { createFeedback, getAllFeedback, getAllSites } from "@lib/supabase-db";
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const { siteId } = context.params;
@@ -48,43 +55,51 @@ const SiteFeedback = ({ initialFeedback }) => {
       authorId: user.uid,
       siteId: router.query.siteId,
       text: inputEl.current.value,
-      createdAt: new Date().toISOString(),
       provider: user.provider,
       status: "pending",
     };
 
-    setAllFeedback([newFeedback, ...allFeedback]);
     await createFeedback(newFeedback);
+    setAllFeedback([newFeedback, ...allFeedback]);
     setIsSubmittingFeedback(false);
   };
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      width="full"
-      maxWidth="700px"
-      margin="0 auto"
-    >
-      <Box as="form" onSubmit={onSubmit}>
-        <FormControl my={8}>
-          <FormLabel htmlFor="email">Comment</FormLabel>
-          <Input ref={inputEl} id="comment" type="text" />
-          <Button
-            isLoading={isSubmittingFeedback}
-            type="submit"
-            fontWeight="medium"
-            mt={2}
-          >
-            Add comment
-          </Button>
-        </FormControl>
-      </Box>
+    <>
+      <Head>
+        <title>Feedback</title>
+      </Head>
+      <Box
+        display="flex"
+        flexDirection="column"
+        width="full"
+        maxWidth="700px"
+        margin="0 auto"
+      >
+        <Box as="form" onSubmit={onSubmit}>
+          <FormControl my={8}>
+            <FormLabel htmlFor="email">Comment</FormLabel>
+            <Input ref={inputEl} id="comment" type="text" />
+            <Button
+              isLoading={isSubmittingFeedback}
+              type="submit"
+              fontWeight="medium"
+              mt={2}
+            >
+              Add comment
+            </Button>
+          </FormControl>
+        </Box>
 
-      {allFeedback.map((feedback) => (
-        <Feedback key={feedback.id} {...feedback} />
-      ))}
-    </Box>
+        {allFeedback.length == 0 ? (
+          <Heading>No Feedbacks...</Heading>
+        ) : (
+          allFeedback.map((feedback) => (
+            <Feedback key={feedback.id} {...feedback} />
+          ))
+        )}
+      </Box>
+    </>
   );
 };
 

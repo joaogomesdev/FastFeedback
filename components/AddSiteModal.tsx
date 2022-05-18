@@ -18,11 +18,10 @@ import { useForm } from "react-hook-form";
 import useSWR, { useSWRConfig } from "swr";
 
 import { useAuth } from "@lib/auth";
-import { fetcher } from "@utils/fetcher";
-import { createSite } from "@lib/firestore";
+import { createSite } from "@lib/supabase-db";
 
 const AddSiteModal = ({ children }) => {
-  const { user } = useAuth();
+  const toast = useToast();
   const { mutate } = useSWRConfig();
 
   const {
@@ -31,8 +30,8 @@ const AddSiteModal = ({ children }) => {
     watch,
     formState: { errors },
   } = useForm();
+  const { user, token } = useAuth();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const toast = useToast();
 
   const [isCreatingSite, setIsCreatingSite] = React.useState(false);
 
@@ -42,9 +41,9 @@ const AddSiteModal = ({ children }) => {
   const onSubmit = async ({ name, link }) => {
     try {
       setIsCreatingSite(true);
+
       const newSite = {
         author: user.uid,
-        createdAt: new Date().toISOString(),
         name,
         link,
       };
@@ -58,7 +57,7 @@ const AddSiteModal = ({ children }) => {
         duration: 5000,
         isClosable: true,
       });
-      mutate(["/api/sites", user.token]);
+      mutate(["/api/sites", token]);
       onClose();
     } catch (error) {}
   };

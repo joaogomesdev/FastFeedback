@@ -1,19 +1,8 @@
 import React from "react";
-import {
-  Flex,
-  Link,
-  Avatar,
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  Heading,
-  Box,
-  Button,
-} from "@chakra-ui/react";
+import { Flex, Link, Avatar, Box, Button } from "@chakra-ui/react";
 
 import { useAuth } from "@lib/auth";
 import { Logo } from "@styles/theme";
-import { AddSiteModal } from "./AddSiteModal";
 
 interface Props {
   children: React.ReactNode;
@@ -46,20 +35,11 @@ const DashboardShell = ({ children }: Props) => {
                 Log Out
               </Button>
             )}
-            <Avatar size="sm" src={user?.photoUrl} />
+            <Avatar size="sm" src={user?.avatar_url} />
           </Flex>
         </Flex>
       </Flex>
       <Flex margin="0 auto" direction="column" maxW="1250px" px={8}>
-        <Breadcrumb>
-          <BreadcrumbItem>
-            <BreadcrumbLink>Sites</BreadcrumbLink>
-          </BreadcrumbItem>
-        </Breadcrumb>
-        <Flex justifyContent="space-between">
-          <Heading mb={8}>My Sites</Heading>
-          <AddSiteModal>+ Add Site</AddSiteModal>
-        </Flex>
         {children}
       </Flex>
     </Box>
