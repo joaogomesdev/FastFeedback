@@ -21,6 +21,7 @@ import { useAuth } from "@lib/auth";
 import { createSite } from "@lib/supabase-db";
 
 const AddSiteModal = ({ children }) => {
+  const toast = useToast();
   const { mutate } = useSWRConfig();
 
   const {
@@ -29,7 +30,6 @@ const AddSiteModal = ({ children }) => {
     watch,
     formState: { errors },
   } = useForm();
-  const toast = useToast();
   const { user, token } = useAuth();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
