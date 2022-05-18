@@ -1,6 +1,5 @@
+import { getAllFeedback } from "@lib/supabase-db";
 import type { NextApiRequest, NextApiResponse } from "next";
-
-import { getAllFeedback } from "@lib/firestore-admin";
 
 export default async function handler(
   req: NextApiRequest,

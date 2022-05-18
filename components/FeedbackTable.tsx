@@ -32,7 +32,7 @@ const FeedbackTable = ({ allFeedback }) => {
               />
             </Td>
             <Td>
-              <RemoveFeedbackButton feedbackId={feedback.uuid} />
+              <RemoveFeedbackButton feedbackId={feedback.id} />
             </Td>
           </Box>
         ))}

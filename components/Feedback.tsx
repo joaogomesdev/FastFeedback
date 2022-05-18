@@ -4,17 +4,17 @@ import { Box, Divider, Heading, Text } from "@chakra-ui/react";
 interface Props {
   author: string;
   text: string;
-  createdAt: string;
+  created_at: string;
 }
 
-const Feedback = ({ author, text, createdAt }: Props) => {
+const Feedback = ({ author, text, created_at }: Props) => {
   return (
     <Box borderRadius={4} maxWidth="700px" w="full">
       <Heading size="sm" as="h3" mb={0} color="gray.900" fontWeight="medium">
         {author}
       </Heading>
       <Text color="gray.500" mb={4} fontSize="xs">
-        {format(parseISO(createdAt), "PPpp")}
+        {created_at && format(parseISO(created_at), "PPpp")}
       </Text>
       <Text color="gray.800">{text}</Text>
       <Divider

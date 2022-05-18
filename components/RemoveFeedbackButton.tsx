@@ -11,14 +11,19 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { DeleteIcon } from "@chakra-ui/icons";
-import { deleteFeedback } from "@lib/firestore-admin";
+import { deleteFeedback } from "@lib/supabase-db";
+import { useSWRConfig } from "swr";
+import { useAuth } from "@lib/auth";
 
 const RemoveFeedbackButton = ({ feedbackId }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = React.useRef();
+  const { mutate } = useSWRConfig();
+  const { token } = useAuth();
 
-  const handleDeleteFeedback = () => {
-    deleteFeedback(feedbackId);
+  const handleDeleteFeedback = async () => {
+    await deleteFeedback(feedbackId);
+    mutate(["/api/feedback", token]);
     onClose();
   };
 

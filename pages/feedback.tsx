@@ -15,8 +15,8 @@ const fetcher = (url: string, token: string) =>
   }).then((res) => res.json());
 
 export default function Feedback() {
-  const { user } = useAuth();
-  const { data } = useSWR(user ? ["/api/feedback", user.token] : null, fetcher);
+  const { user, token } = useAuth();
+  const { data } = useSWR(user ? ["/api/feedback", token] : null, fetcher);
 
   if (!data) {
     return (

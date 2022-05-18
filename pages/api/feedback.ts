@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
-import { auth } from "@lib/firebase-admin";
-import { getUserFeedback } from "@lib/firestore-admin";
+import { supabaseClient } from "@lib/supabase-client";
+import { getUserFeedback } from "@lib/supabase-db";
 
 export default async function handler(
   req: NextApiRequest,
@@ -9,9 +9,11 @@ export default async function handler(
 ) {
   try {
     const { token } = req.headers;
-    const { uid } = await auth.verifyIdToken(String(token));
 
-    const { feedback } = await getUserFeedback(uid);
+    const { data } = await supabaseClient.auth.api.getUser(String(token));
+
+    const { feedback } = await getUserFeedback(data.id);
+    console.log(feedback);
 
     res.status(200).json({ feedback });
   } catch (error) {
