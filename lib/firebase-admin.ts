@@ -1,4 +1,4 @@
-import admin from "firebase-admin";
+import * as admin from "firebase-admin";
 
 import firebaseAdminConfig from "../firebaseAdmin.json";
 
@@ -10,7 +10,7 @@ try {
   });
   console.log("Initialized.");
 } catch (error) {
-  /*
+  /*x33
    * We skip the "already exists" message which is
    * not an actual error when we're hot-reloading.
    */
@@ -19,6 +19,6 @@ try {
   }
 }
 const auth = admin.auth();
-const firestore = admin.firestore();
+const fire = admin.firestore();
 
-export { auth, firestore };
+export { auth, fire };

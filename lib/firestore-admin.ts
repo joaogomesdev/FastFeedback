@@ -1,10 +1,10 @@
 import { compareDesc, parseISO } from "date-fns";
 
-import { firestore } from "./firebase-admin";
+import { fire } from "./firebase-admin";
 
 export async function getAllFeedback(siteId: any) {
   try {
-    const snapshot = await firestore
+    const snapshot = await fire
       .collection("feedback")
       .where("siteId", "==", siteId)
       .get();
@@ -24,9 +24,28 @@ export async function getAllFeedback(siteId: any) {
   }
 }
 
+export async function getUserFeedback(userId) {
+  const snapshot = await fire
+    .collection("feedback")
+    .where("authorId", "==", userId)
+    .get();
+
+  const feedback = [];
+
+  (await snapshot).forEach(async (doc) => {
+    feedback.push({ id: doc.id, ...doc.data() });
+  });
+
+  feedback.sort((a, b) =>
+    compareDesc(parseISO(a.createdAt), parseISO(b.createdAt))
+  );
+
+  return { feedback };
+}
+
 export async function getAllSites() {
   try {
-    const snapshot = await firestore.collection("sites").get();
+    const snapshot = await fire.collection("sites").get();
 
     const sites = [];
 
@@ -41,7 +60,7 @@ export async function getAllSites() {
 }
 
 export async function getUserSites(userId) {
-  const snapshot = await firestore
+  const snapshot = await fire
     .collection("sites")
     .where("author", "==", userId)
     .get();
@@ -53,4 +72,12 @@ export async function getUserSites(userId) {
   });
 
   return { sites };
+}
+
+export async function deleteFeedback(id) {
+  try {
+    await fire.collection("feedback").doc(id).delete();
+  } catch (error) {
+    return { error };
+  }
 }

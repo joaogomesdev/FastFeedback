@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
-import { auth } from "@lib/firebase-admin";
-import { getUserSites } from "@lib/firestore-admin";
+import { getAllSites, getUserSites } from "@lib/supabase-db";
+import { supabaseClient } from "@lib/supabase-client";
 
 export default async function handler(
   req: NextApiRequest,
@@ -9,11 +9,12 @@ export default async function handler(
 ) {
   try {
     const { token } = req.headers;
-    const { uid } = await auth.verifyIdToken(String(token));
 
-    const { sites } = await getUserSites(uid);
+    const { data } = await supabaseClient.auth.api.getUser(String(token));
 
-    res.status(200).json({ sites });
+    const response = await getUserSites(data.id);
+
+    res.status(200).json({ sites: response.sites });
   } catch (error) {
     res.status(500).send({ error });
   }

@@ -1,12 +1,11 @@
 import useSWR from "swr";
 
 import { useAuth } from "@lib/auth";
-import SiteTable from "@components/SiteTable";
 import EmptyState from "@components/EmptyState";
+import FeedbackTable from "@components/FeedbackTable";
 import DashboardShell from "@components/DashboardShell";
 import SiteTableSkeleton from "@components/SiteTableSkeleton";
-import { SiteTableHeader } from "@components/SiteTableHeader";
-import React from "react";
+import { FeedbackTableHeader } from "@components/FeedbackTableHeader";
 
 const fetcher = (url: string, token: string) =>
   fetch(url, {
@@ -15,15 +14,14 @@ const fetcher = (url: string, token: string) =>
     credentials: "same-origin",
   }).then((res) => res.json());
 
-export default function Dashboard() {
-  const { user, token } = useAuth();
-  const { data } = useSWR(user ? ["/api/sites", token] : null, fetcher);
+export default function Feedback() {
+  const { user } = useAuth();
+  const { data } = useSWR(user ? ["/api/feedback", user.token] : null, fetcher);
 
   if (!data) {
     return (
       <DashboardShell>
-        <SiteTableHeader />
-
+        <FeedbackTableHeader />
         <SiteTableSkeleton />
       </DashboardShell>
     );
@@ -31,9 +29,9 @@ export default function Dashboard() {
 
   return (
     <DashboardShell>
-      <SiteTableHeader />
-      {data.sites?.length > 0 ? (
-        <SiteTable sites={data.sites} />
+      <FeedbackTableHeader />
+      {data.feedback?.length > 0 ? (
+        <FeedbackTable allFeedback={data.feedback} />
       ) : (
         <EmptyState />
       )}

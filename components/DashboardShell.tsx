@@ -46,20 +46,11 @@ const DashboardShell = ({ children }: Props) => {
                 Log Out
               </Button>
             )}
-            <Avatar size="sm" src={user?.photoUrl} />
+            <Avatar size="sm" src={user?.avatar_url} />
           </Flex>
         </Flex>
       </Flex>
       <Flex margin="0 auto" direction="column" maxW="1250px" px={8}>
-        <Breadcrumb>
-          <BreadcrumbItem>
-            <BreadcrumbLink>Sites</BreadcrumbLink>
-          </BreadcrumbItem>
-        </Breadcrumb>
-        <Flex justifyContent="space-between">
-          <Heading mb={8}>My Sites</Heading>
-          <AddSiteModal>+ Add Site</AddSiteModal>
-        </Flex>
         {children}
       </Flex>
     </Box>

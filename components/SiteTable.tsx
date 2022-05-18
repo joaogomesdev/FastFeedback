@@ -4,6 +4,7 @@ import { Box, Link } from "@chakra-ui/react";
 
 import { Table, Tr, Th, Td } from "./Table";
 import { format, parseISO } from "date-fns";
+import { json } from "stream/consumers";
 
 const SiteTable = ({ sites }) => {
   return (
@@ -18,7 +19,7 @@ const SiteTable = ({ sites }) => {
       </thead>
       <tbody>
         {sites.map((site) => (
-          <Box as="tr" key={site.uuid}>
+          <Box as="tr" key={site.id}>
             <Td fontWeight="medium">{site.name}</Td>
             <Td>
               <Link href={site.link} isExternal>
@@ -30,7 +31,7 @@ const SiteTable = ({ sites }) => {
                 <Link>View Feedback</Link>
               </NextLink>
             </Td>
-            <Td>{format(parseISO(site.createdAt), "PPpp")}</Td>
+            <Td>{format(parseISO(site.created_at), "PPpp")}</Td>
           </Box>
         ))}
       </tbody>
