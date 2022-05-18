@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
-import { getAllSites, getUserSites } from "@lib/supabase-db";
 import { supabaseClient } from "@lib/supabase-client";
+import { getAllSites, getUserSites } from "@lib/supabase-db";
 
 export default async function handler(
   req: NextApiRequest,

@@ -1,6 +1,3 @@
-import React from "react";
-import { GetStaticProps } from "next";
-import { useRouter } from "next/router";
 import {
   Box,
   Button,
@@ -9,7 +6,10 @@ import {
   Heading,
   Input,
 } from "@chakra-ui/react";
+import React from "react";
 import Head from "next/head";
+import { GetStaticProps } from "next";
+import { useRouter } from "next/router";
 
 import { useAuth } from "@lib/auth";
 import { Feedback } from "@components/Feedback";
@@ -49,7 +49,6 @@ const SiteFeedback = ({ initialFeedback }) => {
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmittingFeedback(true);
-    console.log(user);
 
     const newFeedback = {
       author: user.name,

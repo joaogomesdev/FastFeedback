@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
-import { supabaseClient } from "@lib/supabase-client";
 import { getUserFeedback } from "@lib/supabase-db";
+import { supabaseClient } from "@lib/supabase-client";
 
 export default async function handler(
   req: NextApiRequest,
@@ -13,7 +13,6 @@ export default async function handler(
     const { data } = await supabaseClient.auth.api.getUser(String(token));
 
     const { feedback } = await getUserFeedback(data.id);
-    console.log(feedback);
 
     res.status(200).json({ feedback });
   } catch (error) {

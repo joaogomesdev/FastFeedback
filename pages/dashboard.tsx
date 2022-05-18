@@ -1,4 +1,5 @@
 import useSWR from "swr";
+import React from "react";
 
 import { useAuth } from "@lib/auth";
 import SiteTable from "@components/SiteTable";
@@ -6,7 +7,6 @@ import EmptyState from "@components/EmptyState";
 import DashboardShell from "@components/DashboardShell";
 import SiteTableSkeleton from "@components/SiteTableSkeleton";
 import { SiteTableHeader } from "@components/SiteTableHeader";
-import React from "react";
 
 const fetcher = (url: string, token: string) =>
   fetch(url, {

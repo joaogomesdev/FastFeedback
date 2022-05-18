@@ -18,11 +18,9 @@ import { useForm } from "react-hook-form";
 import useSWR, { useSWRConfig } from "swr";
 
 import { useAuth } from "@lib/auth";
-import { fetcher } from "@utils/fetcher";
 import { createSite } from "@lib/supabase-db";
 
 const AddSiteModal = ({ children }) => {
-  const { user } = useAuth();
   const { mutate } = useSWRConfig();
 
   const {
@@ -31,8 +29,9 @@ const AddSiteModal = ({ children }) => {
     watch,
     formState: { errors },
   } = useForm();
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
+  const { user } = useAuth();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [isCreatingSite, setIsCreatingSite] = React.useState(false);
 

@@ -1,19 +1,8 @@
 import React from "react";
-import {
-  Flex,
-  Link,
-  Avatar,
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  Heading,
-  Box,
-  Button,
-} from "@chakra-ui/react";
+import { Flex, Link, Avatar, Box, Button } from "@chakra-ui/react";
 
 import { useAuth } from "@lib/auth";
 import { Logo } from "@styles/theme";
-import { AddSiteModal } from "./AddSiteModal";
 
 interface Props {
   children: React.ReactNode;

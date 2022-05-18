@@ -1,10 +1,9 @@
 import React from "react";
 import NextLink from "next/link";
+import { format, parseISO } from "date-fns";
 import { Box, Link } from "@chakra-ui/react";
 
 import { Table, Tr, Th, Td } from "./Table";
-import { format, parseISO } from "date-fns";
-import { json } from "stream/consumers";
 
 const SiteTable = ({ sites }) => {
   return (

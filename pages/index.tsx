@@ -1,10 +1,10 @@
+import React from "react";
 import Head from "next/head";
+import Script from "next/script";
 import { Button, Flex, Link, Text } from "@chakra-ui/react";
 
 import { useAuth } from "@lib/auth";
 import { Logo } from "@styles/theme";
-import Script from "next/script";
-import React from "react";
 
 export default function Home() {
   const { user, signInWithGithub } = useAuth();

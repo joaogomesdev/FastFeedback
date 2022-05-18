@@ -1,5 +1,6 @@
-import { getAllFeedback } from "@lib/supabase-db";
 import type { NextApiRequest, NextApiResponse } from "next";
+
+import { getAllFeedback } from "@lib/supabase-db";
 
 export default async function handler(
   req: NextApiRequest,

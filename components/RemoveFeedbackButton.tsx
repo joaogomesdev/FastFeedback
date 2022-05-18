@@ -10,16 +10,18 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import React from "react";
+import { useSWRConfig } from "swr";
+
+import { useAuth } from "@lib/auth";
 import { DeleteIcon } from "@chakra-ui/icons";
 import { deleteFeedback } from "@lib/supabase-db";
-import { useSWRConfig } from "swr";
-import { useAuth } from "@lib/auth";
 
 const RemoveFeedbackButton = ({ feedbackId }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const cancelRef = React.useRef();
   const { mutate } = useSWRConfig();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const { token } = useAuth();
+  const cancelRef = React.useRef();
 
   const handleDeleteFeedback = async () => {
     await deleteFeedback(feedbackId);
