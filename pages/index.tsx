@@ -4,7 +4,7 @@ import Script from "next/script";
 import { Button, Flex, Link, Text } from "@chakra-ui/react";
 
 import { useAuth } from "@lib/auth";
-import { Logo } from "@styles/theme";
+import { Github, Google, Logo } from "@styles/theme";
 
 export default function Home() {
   const { user, signInWithGithub } = useAuth();
@@ -23,7 +23,7 @@ export default function Home() {
       maxW="400px"
       margin="0 auto"
     >
-      <Script
+      {/* <Script
         id="redirectScript"
         dangerouslySetInnerHTML={{
           __html: `
@@ -32,14 +32,14 @@ export default function Home() {
           }
           `,
         }}
-      />
+      /> */}
 
       <Head>
         <title>Fast Feedback</title>
       </Head>
 
       <Logo color="back" fontSize="64px" />
-      <Text mb={4}>
+      <Text mb={8} fontSize="lg">
         <Text as="span" fontWeight="bold" display="inline">
           Fast Feedback
         </Text>
@@ -59,9 +59,38 @@ export default function Home() {
           View Dashboard
         </Button>
       ) : (
-        <Button mt={4} size="sm" onClick={handleSignInWithGithub}>
-          Sign In
-        </Button>
+        <>
+          <Button
+            alignItems="center"
+            justifyContent="center"
+            mt={4}
+            size="lg"
+            onClick={handleSignInWithGithub}
+            leftIcon={<Github />}
+            color="white"
+            backgroundColor="gray.900"
+            fontWeight="medium"
+            _hover={{ bg: "gray.700" }}
+            _active={{ bg: "gray.800", transform: "scale(0.95)" }}
+          >
+            Sign in with Github
+          </Button>
+          <Button
+            alignItems="center"
+            justifyContent="center"
+            mt={4}
+            size="lg"
+            onClick={handleSignInWithGithub}
+            leftIcon={<Google />}
+            color="white"
+            backgroundColor="gray.900"
+            fontWeight="medium"
+            _hover={{ bg: "gray.700" }}
+            _active={{ bg: "gray.800", transform: "scale(0.95)" }}
+          >
+            Sign in with Google
+          </Button>
+        </>
       )}
     </Flex>
   );

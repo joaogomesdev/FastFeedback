@@ -53,13 +53,19 @@ function useAuthProvider() {
   };
 
   const signInWithGithub = async () => {
-    await supabaseClient.auth.signIn({
-      provider: "github",
-    });
+    const { url } = await supabaseClient.auth.signIn(
+      {
+        provider: "github",
+      },
+      { redirectTo: process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL }
+    );
+
+    console.log(url);
   };
 
   const signOut = async () => {
     await supabaseClient.auth.signOut();
+    Cookies.remove("fast-feedback-auth");
     handleUser(false);
   };
 
