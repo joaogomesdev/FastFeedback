@@ -8,6 +8,7 @@ type AuthContextData = {
   user: any;
   token: string;
   signInWithGithub(): Promise<void>;
+  signInWithGoogle(): Promise<void>;
   signOut: () => Promise<void>;
 };
 
@@ -15,6 +16,7 @@ export interface IAuthContext {
   user: any;
   token: string;
   signInWithGithub: () => Promise<void>;
+  signInWithGoogle(): Promise<void>;
   signOut: () => Promise<void>;
 }
 
@@ -53,13 +55,25 @@ function useAuthProvider() {
   };
 
   const signInWithGithub = async () => {
-    await supabaseClient.auth.signIn({
-      provider: "github",
-    });
+    await supabaseClient.auth.signIn(
+      {
+        provider: "github",
+      },
+      { redirectTo: process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL }
+    );
+  };
+  const signInWithGoogle = async () => {
+    await supabaseClient.auth.signIn(
+      {
+        provider: "google",
+      },
+      { redirectTo: process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL }
+    );
   };
 
   const signOut = async () => {
     await supabaseClient.auth.signOut();
+    Cookies.remove("fast-feedback-auth");
     handleUser(false);
   };
 
@@ -90,6 +104,7 @@ function useAuthProvider() {
     user,
     token,
     signInWithGithub,
+    signInWithGoogle,
     signOut,
   };
 }
