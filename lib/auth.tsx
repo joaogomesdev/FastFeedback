@@ -59,6 +59,7 @@ function useAuthProvider() {
       provider: "github",
     });
   };
+
   const signInWithGoogle = async () => {
     await supabaseClient.auth.signIn({
       provider: "google",
