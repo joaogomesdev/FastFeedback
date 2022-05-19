@@ -7,11 +7,7 @@ import { useAuth } from "@lib/auth";
 import { Github, Google, Logo } from "@styles/theme";
 
 export default function Home() {
-  const { user, signInWithGithub } = useAuth();
-
-  const handleSignInWithGithub = async () => {
-    await signInWithGithub();
-  };
+  const { user, signInWithGithub, signInWithGoogle } = useAuth();
 
   return (
     <Flex
@@ -65,7 +61,7 @@ export default function Home() {
             justifyContent="center"
             mt={4}
             size="lg"
-            onClick={handleSignInWithGithub}
+            onClick={signInWithGithub}
             leftIcon={<Github />}
             color="white"
             backgroundColor="gray.900"
@@ -73,22 +69,23 @@ export default function Home() {
             _hover={{ bg: "gray.700" }}
             _active={{ bg: "gray.800", transform: "scale(0.95)" }}
           >
-            Sign in with Github
+            Sign In with Github
           </Button>
           <Button
+            variant="outline"
             alignItems="center"
             justifyContent="center"
             mt={4}
             size="lg"
-            onClick={handleSignInWithGithub}
+            onClick={signInWithGoogle}
             leftIcon={<Google />}
-            color="white"
-            backgroundColor="gray.900"
+            color="gray.900"
+            backgroundColor="white"
             fontWeight="medium"
-            _hover={{ bg: "gray.700" }}
-            _active={{ bg: "gray.800", transform: "scale(0.95)" }}
+            _hover={{ bg: "gray.100" }}
+            _active={{ bg: "gray.100", transform: "scale(0.95)" }}
           >
-            Sign in with Google
+            Sign In with Google
           </Button>
         </>
       )}
