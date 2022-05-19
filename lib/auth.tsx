@@ -70,6 +70,11 @@ function useAuthProvider() {
       { redirectTo: process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL }
     );
   };
+  const signInWithGoogle = async () => {
+    await supabaseClient.auth.signIn({
+      provider: "google",
+    });
+  };
 
   const signOut = async () => {
     await supabaseClient.auth.signOut();
