@@ -55,20 +55,14 @@ function useAuthProvider() {
   };
 
   const signInWithGithub = async () => {
-    await supabaseClient.auth.signIn(
-      {
-        provider: "github",
-      },
-      { redirectTo: process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL }
-    );
+    await supabaseClient.auth.signIn({
+      provider: "github",
+    });
   };
   const signInWithGoogle = async () => {
-    await supabaseClient.auth.signIn(
-      {
-        provider: "google",
-      },
-      { redirectTo: process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL }
-    );
+    await supabaseClient.auth.signIn({
+      provider: "google",
+    });
   };
 
   const signOut = async () => {
