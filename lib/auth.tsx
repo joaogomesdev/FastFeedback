@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 import { supabaseClient } from "./supabase-client";
 import { createUser, getUser } from "./supabase-db";
 import { redirect } from "next/dist/server/api-utils";
+
 import { Session } from "@supabase/supabase-js";
 
 type AuthContextData = {
@@ -42,9 +43,9 @@ function useAuthProvider() {
   const [isLoading, setLoading] = React.useState(false);
 
   const signInWithGithub = async () => {
-    await supabaseClient.auth.signIn({
+    +(await supabaseClient.auth.signIn({
       provider: "github",
-    });
+    }));
   };
 
   const signInWithGoogle = async () => {
