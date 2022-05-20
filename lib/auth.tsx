@@ -60,11 +60,13 @@ function useAuthProvider() {
     });
   };
 
+
   const signInWithGoogle = async () => {
     await supabaseClient.auth.signIn({
       provider: "google",
     });
   };
+ 
 
   const signOut = async () => {
     await supabaseClient.auth.signOut();
