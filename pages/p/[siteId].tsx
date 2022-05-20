@@ -52,7 +52,7 @@ const SiteFeedback = ({ initialFeedback }) => {
 
     const newFeedback = {
       author: user.name,
-      authorId: user.uid,
+      authorId: user.id,
       siteId: router.query.siteId,
       text: inputEl.current.value,
       provider: user.provider,

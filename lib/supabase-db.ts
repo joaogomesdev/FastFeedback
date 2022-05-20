@@ -1,3 +1,4 @@
+import { count } from "console";
 import { supabaseClient } from "./supabase-client";
 
 export const createSite = async (site) => {
@@ -26,7 +27,10 @@ export async function createFeedback(data: any) {
 
 export const getUser = async (id) => {
   try {
-    const { data } = await supabaseClient.from("users").select().eq("uid", id);
+    const { data } = await await supabaseClient
+      .from("users")
+      .select()
+      .eq("uid", id);
     return { user: data };
   } catch (error) {
     return { error };
