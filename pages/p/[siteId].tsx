@@ -59,8 +59,8 @@ const SiteFeedback = ({ initialFeedback }) => {
       status: "pending",
     };
 
-    await createFeedback(newFeedback);
-    setAllFeedback([newFeedback, ...allFeedback]);
+    const { id, created_at } = await createFeedback(newFeedback);
+    setAllFeedback([{ id, created_at, ...newFeedback }, ...allFeedback]);
     setIsSubmittingFeedback(false);
   };
 

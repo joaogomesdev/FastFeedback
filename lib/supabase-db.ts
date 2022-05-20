@@ -3,7 +3,9 @@ import { supabaseClient } from "./supabase-client";
 
 export const createSite = async (site) => {
   try {
-    await supabaseClient.from("sites").insert(site);
+    const { data } = await supabaseClient.from("sites").insert(site);
+
+    return data[0];
   } catch (error) {
     throw new Error(error.message);
   }
@@ -17,9 +19,10 @@ export const createUser = async (user) => {
   }
 };
 
-export async function createFeedback(data: any) {
+export async function createFeedback(feedback: any) {
   try {
-    await supabaseClient.from("feedback").insert(data);
+    const { data } = await supabaseClient.from("feedback").insert(feedback);
+    return data[0];
   } catch (error) {
     throw new Error(error.message);
   }

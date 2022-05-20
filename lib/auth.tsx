@@ -41,23 +41,6 @@ function useAuthProvider() {
   const [session, setSession] = React.useState<Session>();
   const [isLoading, setLoading] = React.useState(false);
 
-  const handleUser = async (rawUser: any) => {
-    if (rawUser) {
-      const user = formatUser(rawUser);
-      console.log(user);
-
-      // await createUser(user);
-
-      // setUser(user);
-
-      return user;
-    } else {
-      setUser(false);
-      Cookies.remove("fast-feedback-auth");
-      return false;
-    }
-  };
-
   const signInWithGithub = async () => {
     await supabaseClient.auth.signIn({
       provider: "github",

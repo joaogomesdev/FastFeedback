@@ -48,7 +48,7 @@ const AddSiteModal = ({ children }) => {
         link,
       };
 
-      await createSite(newSite);
+      const { id, created_at } = await createSite(newSite);
       setIsCreatingSite(false);
       toast({
         title: "Success!",
@@ -57,7 +57,9 @@ const AddSiteModal = ({ children }) => {
         duration: 5000,
         isClosable: true,
       });
-      mutate(["/api/sites", token]);
+      mutate(["/api/sites", token], async (data) => {
+        return { sites: [...data.sites, { id, created_at, ...newSite }] };
+      });
       onClose();
     } catch (error) {}
   };
