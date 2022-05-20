@@ -5,9 +5,13 @@ import { supabaseClient } from "./supabase-client";
 import { createUser, getUser } from "./supabase-db";
 import { redirect } from "next/dist/server/api-utils";
 
+import { Session } from "@supabase/supabase-js";
+
+
 type AuthContextData = {
   user: any;
   token: string;
+  session: Session;
   signInWithGithub(): Promise<void>;
   signInWithGoogle(): Promise<void>;
   signOut: () => Promise<void>;
@@ -16,6 +20,7 @@ type AuthContextData = {
 export interface IAuthContext {
   user: any;
   token: string;
+  session: Session;
   signInWithGithub: () => Promise<void>;
   signInWithGoogle(): Promise<void>;
   signOut: () => Promise<void>;
@@ -35,16 +40,19 @@ export const useAuth = () => {
 function useAuthProvider() {
   const [user, setUser] = React.useState(null);
   const [token, setToken] = React.useState("");
+  const [session, setSession] = React.useState<Session>();
   const [isLoading, setLoading] = React.useState(false);
 
   const handleUser = async (rawUser: any) => {
     if (rawUser) {
       const user = formatUser(rawUser);
-      const existingUser = await getUser(user.uid);
+      console.log(user);
 
-      await createUser(user);
 
-      setUser(user);
+      // await createUser(user);
+
+      // setUser(user);
+
 
       return user;
     } else {
@@ -55,61 +63,59 @@ function useAuthProvider() {
   };
 
   const signInWithGithub = async () => {
-    await supabaseClient.auth.signIn(
-      {
-        provider: "github",
-      },
-      {
-        redirectTo: "https://fast-feedback-chi-ebon.vercel.app",
-      }
-    );
++
+    await supabaseClient.auth.signIn({
+      provider: "github",
+    });
   };
-
 
   const signInWithGoogle = async () => {
-    await supabaseClient.auth.signIn(
-      {
-        provider: "google",
-      },
-      {
-        redirectTo: "https://fast-feedback-chi-ebon.vercel.app",
-      }
-    );
+    await supabaseClient.auth.signIn({
+      provider: "google",
+    });
   };
- 
 
+   
   const signOut = async () => {
     await supabaseClient.auth.signOut();
-    Cookies.remove("fast-feedback-auth");
-    handleUser(false);
+    setUser(false);
   };
 
   React.useEffect(() => {
-    const supabaseSession = supabaseClient.auth.session();
+    const currentSession = supabaseClient.auth.session();
 
-    if (supabaseSession?.user?.id) {
-      handleUser(supabaseSession?.user);
-      setToken(supabaseSession.access_token);
-      Cookies.set("fast-feedback-auth", String(true), {
-        expires: 1,
-      });
+    if (currentSession) {
+      setSession(currentSession);
+      setToken(currentSession.access_token);
+      setUser(formatUser(currentSession?.user));
+    } else {
+      signOut();
     }
-    setLoading(false);
-    supabaseClient.auth.onAuthStateChange((_event, session) => {
-      if (session?.user?.id) {
-        handleUser(supabaseSession?.user);
-        setToken(session.access_token);
-        Cookies.set("fast-feedback-auth", String(true), {
-          expires: 1,
+
+    const { data } = supabaseClient.auth.onAuthStateChange(
+      (event, newSession) => {
+        setSession(newSession);
+        setToken(newSession.access_token);
+        setUser(formatUser(newSession?.user));
+
+        fetch("/api/auth", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "same-origin",
+          body: JSON.stringify({ event, session: newSession }),
         });
       }
-      setLoading(false);
-    });
+    );
+
+    return () => {
+      data.unsubscribe();
+    };
   }, []);
 
   return {
     user,
     token,
+    session,
     signInWithGithub,
     signInWithGoogle,
     signOut,
@@ -117,14 +123,14 @@ function useAuthProvider() {
 }
 
 const formatUser = (user: any) => {
-  const userData = user.user_metadata;
-  const provider = user.identities[0].provider;
+  const userData = user?.user_metadata;
+  const provider = user?.identities[0].provider;
 
   return {
-    uid: user.id,
-    email: userData.email,
-    name: userData.full_name,
+    id: user?.id,
+    email: userData?.email,
+    name: userData?.full_name,
     provider: provider,
-    avatar_url: userData.avatar_url,
+    avatar_url: userData?.avatar_url,
   };
 };

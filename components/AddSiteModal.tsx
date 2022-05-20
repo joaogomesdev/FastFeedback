@@ -43,7 +43,7 @@ const AddSiteModal = ({ children }) => {
       setIsCreatingSite(true);
 
       const newSite = {
-        author: user.uid,
+        author: user.id,
         name,
         link,
       };

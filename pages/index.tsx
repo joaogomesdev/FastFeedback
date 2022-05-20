@@ -5,10 +5,11 @@ import { Button, Flex, Link, Text } from "@chakra-ui/react";
 
 import { useAuth } from "@lib/auth";
 import { Github, Google, Logo } from "@styles/theme";
+import { useRouter } from "next/router";
 
 export default function Home() {
   const { user, signInWithGithub, signInWithGoogle } = useAuth();
-
+  const navigate = useRouter();
   return (
     <Flex
       as="main"
@@ -19,7 +20,7 @@ export default function Home() {
       maxW="400px"
       margin="0 auto"
     >
-      {/* <Script
+      <Script
         id="redirectScript"
         dangerouslySetInnerHTML={{
           __html: `
@@ -28,7 +29,7 @@ export default function Home() {
           }
           `,
         }}
-      /> */}
+      />
 
       <Head>
         <title>Fast Feedback</title>
