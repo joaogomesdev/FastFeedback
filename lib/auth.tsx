@@ -65,6 +65,7 @@ function useAuthProvider() {
     );
   };
 
+
   const signInWithGoogle = async () => {
     await supabaseClient.auth.signIn(
       {
@@ -75,6 +76,7 @@ function useAuthProvider() {
       }
     );
   };
+ 
 
   const signOut = async () => {
     await supabaseClient.auth.signOut();
