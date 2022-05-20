@@ -55,25 +55,15 @@ function useAuthProvider() {
   };
 
   const signInWithGithub = async () => {
-    await supabaseClient.auth.signIn(
-      {
-        provider: "github",
-      },
-      {
-        redirectTo: "https://fast-feedback-chi-ebon.vercel.app",
-      }
-    );
+    await supabaseClient.auth.signIn({
+      provider: "github",
+    });
   };
 
   const signInWithGoogle = async () => {
-    await supabaseClient.auth.signIn(
-      {
-        provider: "google",
-      },
-      {
-        redirectTo: "https://fast-feedback-chi-ebon.vercel.app",
-      }
-    );
+    await supabaseClient.auth.signIn({
+      provider: "google",
+    });
   };
 
   const signOut = async () => {
