@@ -94,7 +94,7 @@ const SiteFeedback = ({ initialFeedback }) => {
         {allFeedback.length == 0 ? (
           <Heading>No Feedbacks...</Heading>
         ) : (
-          allFeedback.map((feedback) => (
+          allFeedback?.map((feedback) => (
             <Feedback key={feedback.id} {...feedback} />
           ))
         )}
