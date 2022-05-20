@@ -4,7 +4,9 @@ import Cookies from "js-cookie";
 import { supabaseClient } from "./supabase-client";
 import { createUser, getUser } from "./supabase-db";
 import { redirect } from "next/dist/server/api-utils";
+
 import { Session } from "@supabase/supabase-js";
+
 
 type AuthContextData = {
   user: any;
@@ -46,9 +48,11 @@ function useAuthProvider() {
       const user = formatUser(rawUser);
       console.log(user);
 
+
       // await createUser(user);
 
       // setUser(user);
+
 
       return user;
     } else {
@@ -59,6 +63,7 @@ function useAuthProvider() {
   };
 
   const signInWithGithub = async () => {
++
     await supabaseClient.auth.signIn({
       provider: "github",
     });
@@ -70,6 +75,7 @@ function useAuthProvider() {
     });
   };
 
+   
   const signOut = async () => {
     await supabaseClient.auth.signOut();
     setUser(false);
