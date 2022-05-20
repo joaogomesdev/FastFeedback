@@ -3,6 +3,7 @@ import Cookies from "js-cookie";
 
 import { supabaseClient } from "./supabase-client";
 import { createUser, getUser } from "./supabase-db";
+import { redirect } from "next/dist/server/api-utils";
 
 type AuthContextData = {
   user: any;
@@ -41,9 +42,8 @@ function useAuthProvider() {
       const user = formatUser(rawUser);
       const existingUser = await getUser(user.uid);
 
-      if (existingUser.user.length == 0) {
-        await createUser(user);
-      }
+      await createUser(user);
+
       setUser(user);
 
       return user;
@@ -55,15 +55,25 @@ function useAuthProvider() {
   };
 
   const signInWithGithub = async () => {
-    await supabaseClient.auth.signIn({
-      provider: "github",
-    });
+    await supabaseClient.auth.signIn(
+      {
+        provider: "github",
+      },
+      {
+        redirectTo: "https://fast-feedback-chi-ebon.vercel.app",
+      }
+    );
   };
 
   const signInWithGoogle = async () => {
-    await supabaseClient.auth.signIn({
-      provider: "google",
-    });
+    await supabaseClient.auth.signIn(
+      {
+        provider: "google",
+      },
+      {
+        redirectTo: "https://fast-feedback-chi-ebon.vercel.app",
+      }
+    );
   };
 
   const signOut = async () => {
