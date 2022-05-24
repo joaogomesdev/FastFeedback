@@ -1,12 +1,8 @@
 import React from "react";
-import Cookies from "js-cookie";
-
-import { supabaseClient } from "./supabase-client";
-import { createUser, getUser } from "./supabase-db";
-import { redirect } from "next/dist/server/api-utils";
+import Router from "next/router";
 
 import { Session } from "@supabase/supabase-js";
-import Router from "next/router";
+import { supabaseClient } from "./supabase-client";
 
 type AuthContextData = {
   user: any;
