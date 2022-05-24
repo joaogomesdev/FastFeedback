@@ -1,7 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
+import { getUserSites } from "@lib/supabase-db";
 import { supabaseClient } from "@lib/supabase-client";
-import { getAllSites, getUserSites } from "@lib/supabase-db";
+import { formatObjectKeys, logger } from "@utils/logger";
 
 export default async function handler(
   req: NextApiRequest,
@@ -16,6 +17,20 @@ export default async function handler(
 
     res.status(200).json({ sites: response.sites });
   } catch (error) {
+    logger.error(
+      {
+        request: {
+          headers: formatObjectKeys(req.headers),
+          url: req.url,
+          method: req.method,
+        },
+        response: {
+          statusCode: res.statusCode,
+        },
+      },
+      error.message
+    );
+
     res.status(500).send({ error });
   }
 }
