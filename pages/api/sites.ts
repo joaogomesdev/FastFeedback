@@ -15,7 +15,7 @@ export default async function handler(
 
     const response = await getUserSites(data.id);
 
-    res.status(200).json({ sites: response.sites });
+    res.status(200).json({ sites: response.sites.reverse() });
   } catch (error) {
     logger.error(
       {

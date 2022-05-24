@@ -54,8 +54,9 @@ export async function getAllFeedback(siteId) {
     const { data } = await supabaseClient
       .from("feedback")
       .select()
-      .eq("siteId", siteId)
-      .order("created_at", { ascending: false });
+      .eq("siteId", siteId);
+
+    data.reverse();
 
     return { feedback: data };
   } catch (error) {
@@ -80,6 +81,7 @@ export async function getUserFeedback(userId) {
     .from("feedback")
     .select()
     .eq("authorId", userId);
+
   return { feedback: data };
 }
 

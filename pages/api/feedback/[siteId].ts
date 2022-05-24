@@ -13,5 +13,5 @@ export default async function handler(
     res.status(500).send({ error });
   }
 
-  res.status(200).send({ feedback });
+  res.status(200).send({ feedback: feedback.reverse() });
 }

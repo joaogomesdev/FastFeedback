@@ -65,7 +65,7 @@ function useAuthProvider() {
       setToken(currentSession?.access_token);
       setUser(formatUser(currentSession?.user));
     } else {
-      signOut();
+      setUser(false);
     }
 
     const { data } = supabaseClient.auth.onAuthStateChange(
