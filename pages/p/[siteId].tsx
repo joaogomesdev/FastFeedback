@@ -34,7 +34,7 @@ export async function getStaticPaths() {
 
   return {
     paths,
-    fallback: false,
+    fallback: true,
   };
 }
 
@@ -62,6 +62,7 @@ const SiteFeedback = ({ initialFeedback }) => {
     const { id, created_at } = await createFeedback(newFeedback);
     setAllFeedback([{ id, created_at, ...newFeedback }, ...allFeedback]);
     setIsSubmittingFeedback(false);
+    inputEl.current.value = "";
   };
 
   return (
