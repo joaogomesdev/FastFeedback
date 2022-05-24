@@ -6,6 +6,7 @@ import { createUser, getUser } from "./supabase-db";
 import { redirect } from "next/dist/server/api-utils";
 
 import { Session } from "@supabase/supabase-js";
+import Router from "next/router";
 
 type AuthContextData = {
   user: any;
@@ -43,9 +44,9 @@ function useAuthProvider() {
   const [isLoading, setLoading] = React.useState(false);
 
   const signInWithGithub = async () => {
-    +(await supabaseClient.auth.signIn({
+    await supabaseClient.auth.signIn({
       provider: "github",
-    }));
+    });
   };
 
   const signInWithGoogle = async () => {
@@ -57,6 +58,7 @@ function useAuthProvider() {
   const signOut = async () => {
     await supabaseClient.auth.signOut();
     setUser(false);
+    Router.push("/");
   };
 
   React.useEffect(() => {
@@ -64,7 +66,7 @@ function useAuthProvider() {
 
     if (currentSession) {
       setSession(currentSession);
-      setToken(currentSession.access_token);
+      setToken(currentSession?.access_token);
       setUser(formatUser(currentSession?.user));
     } else {
       signOut();
@@ -73,7 +75,7 @@ function useAuthProvider() {
     const { data } = supabaseClient.auth.onAuthStateChange(
       (event, newSession) => {
         setSession(newSession);
-        setToken(newSession.access_token);
+        setToken(newSession?.access_token);
         setUser(formatUser(newSession?.user));
 
         fetch("/api/auth", {
@@ -82,6 +84,8 @@ function useAuthProvider() {
           credentials: "same-origin",
           body: JSON.stringify({ event, session: newSession }),
         });
+
+        Router.push("/dashboard");
       }
     );
 
