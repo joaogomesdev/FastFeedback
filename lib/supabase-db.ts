@@ -1,4 +1,3 @@
-import { count } from "console";
 import { supabaseClient } from "./supabase-client";
 
 export const createSite = async (site) => {
@@ -13,7 +12,9 @@ export const createSite = async (site) => {
 
 export const createUser = async (user) => {
   try {
-    await supabaseClient.from("users").insert(user);
+    if (user.name) {
+      await supabaseClient.from("users").insert(user);
+    }
   } catch (error) {
     throw new Error(error.message);
   }
@@ -30,10 +31,19 @@ export async function createFeedback(feedback: any) {
 
 export const getUser = async (id) => {
   try {
-    const { data } = await await supabaseClient
+    const { data } = await supabaseClient.from("users").select().eq("uid", id);
+    return { user: data };
+  } catch (error) {
+    return { error };
+  }
+};
+
+export const getUserByEmail = async (email) => {
+  try {
+    const { data } = await supabaseClient
       .from("users")
       .select()
-      .eq("uid", id);
+      .eq("email", email);
     return { user: data };
   } catch (error) {
     return { error };
@@ -85,10 +95,36 @@ export async function getUserFeedback(userId) {
   return { feedback: data };
 }
 
+export async function getUserByCustomerId(customerId) {
+  const { data } = await supabaseClient
+    .from("users")
+    .select()
+    .eq("stripe_customer_id", customerId);
+
+  return { user: data };
+}
+
 export async function deleteFeedback(id) {
   try {
     await supabaseClient.from("feedback").delete().match({ id });
   } catch (error) {
     return { error };
   }
+}
+
+export const createSubscription = async (subscription) => {
+  try {
+    await supabaseClient.from("subscriptions").insert(subscription);
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+export async function getSubscriptionByUserId(id) {
+  const { data } = await supabaseClient
+    .from("subscriptions")
+    .select()
+    .eq("userId", id);
+
+  return { sub: data };
 }

@@ -11,7 +11,6 @@ const SITE_ID = "dc1b6d39-7a25-4884-b596-5821eb81c45b";
 
 export async function getStaticProps(context) {
   const { feedback } = await getAllFeedback(SITE_ID);
-  console.log(feedback);
 
   return {
     props: {
@@ -32,7 +31,7 @@ const Home = ({ allFeedback }) => {
             id="redirectScript"
             dangerouslySetInnerHTML={{
               __html: `
-          if (document.cookie && document.cookie.includes('fast-feedback-auth')) {
+          if (document.cookie && document.cookie.includes('supabase.auth.token')) {
             window.location.href = "/dashboard"
           }
           `,

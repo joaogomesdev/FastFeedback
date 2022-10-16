@@ -3,6 +3,7 @@ import Router from "next/router";
 
 import { Session } from "@supabase/supabase-js";
 import { supabaseClient } from "./supabase-client";
+import { createUser, getUserByEmail } from "./supabase-db";
 
 type AuthContextData = {
   user: any;
@@ -37,7 +38,6 @@ function useAuthProvider() {
   const [user, setUser] = React.useState(null);
   const [token, setToken] = React.useState("");
   const [session, setSession] = React.useState<Session>();
-  const [isLoading, setLoading] = React.useState(false);
 
   const signInWithGithub = async () => {
     await supabaseClient.auth.signIn({
@@ -59,7 +59,6 @@ function useAuthProvider() {
 
   React.useEffect(() => {
     const currentSession = supabaseClient.auth.session();
-
     if (currentSession) {
       setSession(currentSession);
       setToken(currentSession?.access_token);
@@ -67,24 +66,20 @@ function useAuthProvider() {
     } else {
       setUser(false);
     }
-
     const { data } = supabaseClient.auth.onAuthStateChange(
       (event, newSession) => {
         setSession(newSession);
         setToken(newSession?.access_token);
         setUser(formatUser(newSession?.user));
-
+        formatOptionalUser(newSession?.user);
         fetch("/api/auth", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "same-origin",
           body: JSON.stringify({ event, session: newSession }),
         });
-
-        Router.push("/dashboard");
       }
     );
-
     return () => {
       data.unsubscribe();
     };
@@ -100,6 +95,26 @@ function useAuthProvider() {
   };
 }
 
+const formatOptionalUser = async (user: any) => {
+  const userData = user?.user_metadata;
+  const provider = user?.identities[0].provider;
+
+  const usr = {
+    uid: user?.id,
+    email: userData?.email,
+    name: userData?.full_name,
+    provider: provider,
+    avatar_url: userData?.avatar_url,
+  };
+
+  if (usr) {
+    const existingUser = await getUserByEmail(usr?.email);
+
+    if (existingUser.user.length === 0) {
+      await createUser(usr);
+    }
+  }
+};
 const formatUser = (user: any) => {
   const userData = user?.user_metadata;
   const provider = user?.identities[0].provider;

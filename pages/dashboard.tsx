@@ -18,7 +18,6 @@ const fetcher = (url: string, token: string) =>
 export default function Dashboard() {
   const { user, token } = useAuth();
   const { data } = useSWR(user ? ["/api/sites", token] : null, fetcher);
-
   if (!data) {
     return (
       <DashboardShell>

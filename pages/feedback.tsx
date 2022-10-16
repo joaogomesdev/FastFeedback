@@ -22,7 +22,8 @@ export default function Feedback() {
     return (
       <DashboardShell>
         <FeedbackTableHeader />
-        <SiteTableSkeleton />
+        {/* <SiteTableSkeleton /> */}
+        <FeedbackTable />
       </DashboardShell>
     );
   }
@@ -30,11 +31,11 @@ export default function Feedback() {
   return (
     <DashboardShell>
       <FeedbackTableHeader />
-      {data.feedback?.length > 0 ? (
-        <FeedbackTable allFeedback={data.feedback} />
+      {/* {data.feedback?.length > 0 ? (
+        // <FeedbackTable allFeedback={data.feedback} />
       ) : (
         <EmptyState />
-      )}
+      )} */}
     </DashboardShell>
   );
 }
